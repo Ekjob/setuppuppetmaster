@@ -63,3 +63,26 @@ done
 # change memory allocation for the puppetserver
 echo "changing memory allocation for puppetserver"
 sed -i 's/JAVA_ARGS="-Xms2g -Xmx2g/JAVA_ARGS="-Xms512m -Xmx512m/g' /etc/sysconfig/puppetserver
+
+# configure puppet.conf
+echo "configuring puppet.conf"
+echo "# Pupper Server Configuration"             >> /etc/puppetlabs/puppet/puppet.conf
+echo "[master]"                                  >> /etc/puppetlabs/puppet/puppet.conf
+echo "dns_alt_names = puppetserver,puppetmaster" >> /etc/puppetlabs/puppet/puppet.conf
+echo "# Puppet Agent Configuration"              >> /etc/puppetlabs/puppet/puppet.conf
+echo "[main]"                                    >> /etc/puppetlabs/puppet/puppet.conf
+echo "certname = puppetmaster"                   >> /etc/puppetlabs/puppet/puppet.conf
+echo "server = puppetmaster"                     >> /etc/puppetlabs/puppet/puppet.conf
+echo "runinterval = 30m"                         >> /etc/puppetlabs/puppet/puppet.conf
+
+# Add /opt/puppetlabs/bin to the path for sh compatible users
+echo "Add /opt/puppetlabs/bin to the path for sh compatible users"
+source /etc/profile.d/puppet-agent.sh
+
+# setup puppet server ca
+echo "setup puppet server ca"
+puppetserver ca setup
+
+# enable and start puppet server
+echo "starting and enabling puppet server"
+systemctl enable --now puppetserver
