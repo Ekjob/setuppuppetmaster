@@ -65,15 +65,63 @@ echo "changing memory allocation for puppetserver"
 sed -i 's/JAVA_ARGS="-Xms2g -Xmx2g/JAVA_ARGS="-Xms512m -Xmx512m/g' /etc/sysconfig/puppetserver
 
 # configure puppet.conf
-echo "configuring puppet.conf"
-echo "# Pupper Server Configuration"             >> /etc/puppetlabs/puppet/puppet.conf
-echo "[master]"                                  >> /etc/puppetlabs/puppet/puppet.conf
-echo "dns_alt_names = puppetserver,puppetmaster" >> /etc/puppetlabs/puppet/puppet.conf
-echo "# Puppet Agent Configuration"              >> /etc/puppetlabs/puppet/puppet.conf
-echo "[main]"                                    >> /etc/puppetlabs/puppet/puppet.conf
-echo "certname = puppetmaster"                   >> /etc/puppetlabs/puppet/puppet.conf
-echo "server = puppetmaster"                     >> /etc/puppetlabs/puppet/puppet.conf
-echo "runinterval = 30m"                         >> /etc/puppetlabs/puppet/puppet.conf
+PUPPETDOTCONFPATH="/etc/puppetlabs/puppet/puppet.conf"
+PUPPETDOTCONFLINE1="# Puppet Server Configuration"
+PUPPETDOTCONFLINE2="[master]"
+PUPPETDOTCONFLINE3="dns_alt_names = puppetserver,puppetmaster"
+PUPPETDOTCONFLINE4="# Puppet Agent Configuration"
+PUPPETDOTCONFLINE5="[main]"
+PUPPETDOTCONFLINE6="certname = puppetmaster"
+PUPPETDOTCONFLINE7="server = puppetmaster"
+PUPPETDOTCONFLINE8="runinterval = 30m"
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE1" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE1" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE2" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE2" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE3" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE3" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE4" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE4" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE5" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE5" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE6" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE6" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE7" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE7" >> "$PUPPETDOTCONFPATH";
+fi
+
+if [ ! -z "$(grep "$PUPPETDOTCONFLINE8" "$PUPPETDOTCONFPATH")" ]; then
+        echo "line already in puppet.conf, skipping"; else
+        echo "adding line to puppet.conf"
+        echo "$PUPPETDOTCONFLINE8" >> "$PUPPETDOTCONFPATH";
+fi
 
 # Add /opt/puppetlabs/bin to the path for sh compatible users
 echo "Add /opt/puppetlabs/bin to the path for sh compatible users"
@@ -86,3 +134,20 @@ puppetserver ca setup
 # enable and start puppet server
 echo "starting and enabling puppet server"
 systemctl enable --now puppetserver
+
+# configure /etc/hosts
+ETCHOSTSPATH="/etc/hosts"
+ETCHOSTSLINE1="10.0.0.3 puppetc01"
+ETCHOSTSLINE2="10.0.0.4 puppetc02"
+
+if [ ! -z "$(grep "$ETCHOSTSLINE1" "$ETCHOSTSPATH")" ]; then
+        echo "line already in /etc/hosts, skipping"; else
+        echo "adding line to /etc/hosts"
+        echo "$ETCHOSTSLINE1" >> "$ETCHOSTSPATH";
+fi
+
+if [ ! -z "$(grep "$ETCHOSTSLINE2" "$ETCHOSTSPATH")" ]; then
+        echo "line already in /etc/hosts, skipping"; else
+        echo "adding line to /etc/hosts"
+        echo "$ETCHOSTSLINE2" >> "$ETCHOSTSPATH";
+fi
