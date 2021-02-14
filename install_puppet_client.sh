@@ -64,35 +64,11 @@ while true; do
 done
 
 # configure puppet.conf
-PUPPETDOTCONFPATH="/etc/puppetlabs/puppet/puppet.conf"
-PUPPETDOTCONFLINE1="[main]"
-PUPPETDOTCONFLINE2="server = puppetmaster"
-PUPPETDOTCONFLINE3="certname = puppetc01"
-PUPPETDOTCONFLINE4="runinterval = 30m"
+/opt/puppetlabs/bin/puppet config set certname 'puppetc01' --section main
 
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE1" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE1" >> "$PUPPETDOTCONFPATH";
-fi
+/opt/puppetlabs/bin/puppet config set server 'puppetmaster' --section main
 
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE2" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE2" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE3" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE3" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE4" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE4" >> "$PUPPETDOTCONFPATH";
-fi
+/opt/puppetlabs/bin/puppet config set runinterval '30m' --section main
 
 # Add /opt/puppetlabs/bin to the path for sh compatible users
 echo "Add /opt/puppetlabs/bin to the path for sh compatible users"
