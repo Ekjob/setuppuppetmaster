@@ -65,63 +65,13 @@ echo "changing memory allocation for puppetserver"
 sed -i 's/JAVA_ARGS="-Xms2g -Xmx2g/JAVA_ARGS="-Xms512m -Xmx512m/g' /etc/sysconfig/puppetserver
 
 # configure puppet.conf
-PUPPETDOTCONFPATH="/etc/puppetlabs/puppet/puppet.conf"
-PUPPETDOTCONFLINE1="# Puppet Server Configuration"
-PUPPETDOTCONFLINE2="[master]"
-PUPPETDOTCONFLINE3="dns_alt_names = puppetserver,puppetmaster"
-PUPPETDOTCONFLINE4="# Puppet Agent Configuration"
-PUPPETDOTCONFLINE5="[main]"
-PUPPETDOTCONFLINE6="certname = puppetmaster"
-PUPPETDOTCONFLINE7="server = puppetmaster"
-PUPPETDOTCONFLINE8="runinterval = 30m"
+/opt/puppetlabs/bin/puppet config set dns_alt_names 'puppet,puppetserver,puppetmaster' --section master
 
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE1" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE1" >> "$PUPPETDOTCONFPATH";
-fi
+/opt/puppetlabs/bin/puppet config set certname 'puppetmaster' --section main
 
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE2" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE2" >> "$PUPPETDOTCONFPATH";
-fi
+/opt/puppetlabs/bin/puppet config set server 'puppetmaster' --section main
 
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE3" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE3" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE4" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE4" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE5" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE5" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE6" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE6" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE7" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE7" >> "$PUPPETDOTCONFPATH";
-fi
-
-if [ ! -z "$(grep "$PUPPETDOTCONFLINE8" "$PUPPETDOTCONFPATH")" ]; then
-        echo "line already in puppet.conf, skipping"; else
-        echo "adding line to puppet.conf"
-        echo "$PUPPETDOTCONFLINE8" >> "$PUPPETDOTCONFPATH";
-fi
+/opt/puppetlabs/bin/puppet config set runinterval '30m' --section main
 
 # Add /opt/puppetlabs/bin to the path for sh compatible users
 echo "Add /opt/puppetlabs/bin to the path for sh compatible users"
@@ -137,8 +87,9 @@ systemctl enable --now puppetserver
 
 # configure /etc/hosts
 ETCHOSTSPATH="/etc/hosts"
-ETCHOSTSLINE1="10.0.0.3 puppetc01"
-ETCHOSTSLINE2="10.0.0.4 puppetc02"
+ETCHOSTSLINE1="10.0.0.2 puppet puppetmaster puppetserver"
+ETCHOSTSLINE2="10.0.0.3 puppetc01"
+ETCHOSTSLINE3="10.0.0.4 puppetc02"
 
 if [ ! -z "$(grep "$ETCHOSTSLINE1" "$ETCHOSTSPATH")" ]; then
         echo "line already in /etc/hosts, skipping"; else
@@ -150,4 +101,10 @@ if [ ! -z "$(grep "$ETCHOSTSLINE2" "$ETCHOSTSPATH")" ]; then
         echo "line already in /etc/hosts, skipping"; else
         echo "adding line to /etc/hosts"
         echo "$ETCHOSTSLINE2" >> "$ETCHOSTSPATH";
+fi
+
+if [ ! -z "$(grep "$ETCHOSTSLINE3" "$ETCHOSTSPATH")" ]; then
+        echo "line already in /etc/hosts, skipping"; else
+        echo "adding line to /etc/hosts"
+        echo "$ETCHOSTSLINE3" >> "$ETCHOSTSPATH";
 fi
