@@ -65,12 +65,13 @@ echo "changing memory allocation for puppetserver"
 sed -i 's/JAVA_ARGS="-Xms2g -Xmx2g/JAVA_ARGS="-Xms512m -Xmx512m/g' /etc/sysconfig/puppetserver
 
 # configure puppet.conf
+echo "add dns_alt_names to puppet.conf"
 /opt/puppetlabs/bin/puppet config set dns_alt_names 'puppet,puppetserver,puppetmaster' --section master
-
+echo "add certname to puppet.conf"
 /opt/puppetlabs/bin/puppet config set certname 'puppetmaster' --section main
-
+echo "add server to puppet.conf"
 /opt/puppetlabs/bin/puppet config set server 'puppetmaster' --section main
-
+echo "add runinterval to puppet.conf"
 /opt/puppetlabs/bin/puppet config set runinterval '30m' --section main
 
 # Add /opt/puppetlabs/bin to the path for sh compatible users
@@ -108,3 +109,14 @@ if [ ! -z "$(grep "$ETCHOSTSLINE3" "$ETCHOSTSPATH")" ]; then
         echo "adding line to /etc/hosts"
         echo "$ETCHOSTSLINE3" >> "$ETCHOSTSPATH";
 fi
+
+#ask if the machine must be rebooted
+while true; do
+        read -p "Reboot the machine? y(es),n(o)skip,a(bort)script: " yna
+    case $yna in
+        [Yy]* ) shutdown -r now; break;;
+        [Nn]* ) echo "Skipping reboot"; break;;
+        [Aa]* ) exit;;
+        * ) echo "Please answer yes, no or abort.";;
+    esac
+done

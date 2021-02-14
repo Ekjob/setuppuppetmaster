@@ -64,10 +64,11 @@ while true; do
 done
 
 # configure puppet.conf
+echo "adding certname to puppet.conf"
 /opt/puppetlabs/bin/puppet config set certname 'puppetc01' --section main
-
+echo "adding server to puppet.conf"
 /opt/puppetlabs/bin/puppet config set server 'puppetmaster' --section main
-
+echo "adding runinterval to puppet.conf"
 /opt/puppetlabs/bin/puppet config set runinterval '30m' --section main
 
 # Add /opt/puppetlabs/bin to the path for sh compatible users
